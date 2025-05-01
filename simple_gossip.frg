@@ -1,6 +1,8 @@
 #lang forge/temporal
 
 option max_tracelength 14
+option no_overflow true
+option run_sterling "simple_gossip_vis.js"
 
 one sig System {}
 
@@ -74,4 +76,4 @@ run {
     always {wellformed}
     initialSimple
     always {(gossip and distinctSpread) or allHeard}
-} for exactly 10 Node, 5 Int
+} for exactly 20 Node, 6 Int
