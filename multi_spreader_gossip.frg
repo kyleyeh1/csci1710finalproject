@@ -105,6 +105,6 @@ run {
     multiSpreadGossipTraces
 } for exactly 20 Node, 6 Int, 2 RumorSpreader, 18 RumorListener, 2 Rumor
 
-run {
-    multiSpreadGossipTraces
-} for exactly 8 Node, 6 Int, 2 RumorSpreader, 6 RumorListener, 2 Rumor
+// run {
+//     multiSpreadGossipTraces
+// } for exactly 8 Node, 6 Int, 2 RumorSpreader, 6 RumorListener, 2 Rumor

@@ -5,6 +5,7 @@ option min_tracelength 5
 option no_overflow true
 option run_sterling "simple_gossip_vis.js"
 
+
 one sig System {}
 
 abstract sig Node {
@@ -42,10 +43,10 @@ pred distinctSpread {
             let ignorant = {n : Node | {RumorSpreader.rumor not in n.heardRumors}} | {
                 // firstRound in secondRound
                 // #(ignorant) > #(firstround)
-                #(ignorant) > #(firstRound) => { // More Ignorant Nodes Than Spreaders
+                #(ignorant) > #(firstRound) => { // more ignorant nodes than spreaders
                     #(firstRound) = #(secondRound - firstRound)
                 }
-                #{ignorant} <= #{secondRound - firstRound} => { // Ignorant Nodes Less Than or Equal to Spreaders
+                #{ignorant} <= #{secondRound - firstRound} => { // ignorant nodes less than or equal to spreaders
                     #{ignorant} = #{secondRound - firstRound}
                 }
             }
