@@ -1,7 +1,5 @@
 #lang forge/temporal
 
-option max_tracelength 14
-option min_tracelength 5
 option no_overflow true
 option run_sterling "simple_gossip_vis.js"
 
@@ -20,7 +18,10 @@ sig RumorSpreader extends Node {
 sig RumorListener extends Node {}
 
 pred wellformed {
-    all disj rs1, rs2: RumorSpreader | #{rs1.baseRumors & rs2.baseRumors} = 0
+    all disj rs1, rs2: RumorSpreader | #{{rs1.baseRumors} & {rs2.baseRumors}} = 0
+    all rs: RumorSpreader { 
+        rs.baseRumors = rs.baseRumors'
+    }
 }
 
 pred initialRumor[r: Rumor] {
@@ -28,8 +29,10 @@ pred initialRumor[r: Rumor] {
         r not in rl.heardRumors
     }
     one rs: RumorSpreader | {
-        r in rs.heardRumors
         r in rs.baseRumors
+    }
+    all rs: RumorSpreader | {
+        r in rs.baseRumors <=> r in rs.heardRumors
     }
 }
 
@@ -93,26 +96,13 @@ pred spreadOneRumor[r: Rumor] {
 }
 
 pred gossipTraces {
-    always {wellformed}
+    always{wellformed}
     all r: Rumor | {
-        eventually {spreadOneRumor[r]}
+        spreadOneRumor[r]
     }
 } 
 
-// pred nonConvergence {
-//     always {wellformed}
-//     initialSimple
-//     always {(gossip and nonDistinctSpread)}
-//     always {not allHeard}
-// }
-
 run {
-    all r: Rumor | {
-        always {wellformed}
-        always {initialRumor[r]}
-    }
-} for exactly 20 Node, 5 Rumor, 6 Int 
-
-// run {
-//     multiSpreadGossipTraces
-// } for exactly 8 Node, 6 Int, 2 RumorSpreader, 6 RumorListener, 2 Rumor
+    gossipTraces
+    #Rumor = 3 // apparently this is the only way it works lmao
+} for exactly 10 Node, 7 Int, 2 RumorSpreader, 8 RumorListener, 3 Rumor
