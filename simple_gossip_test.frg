@@ -12,6 +12,7 @@ assert {gossip and distinctSpread} is sat for exactly 20 Node, 6 Int, 1 Rumor
 assert {gossip and nonDistinctSpread} is sat for exactly 20 Node, 6 Int, 1 Rumor
 
 assert {all r: Rumor | no rs: RumorSpreader | rs.rumor = r} is unsat for exactly 20 Node, 6 Int, 1 Rumor
+<<<<<<< HEAD
 
 test expect {
     // simpleGossipTraces should always eventually reach allHeard
@@ -24,3 +25,5 @@ test expect {
         nonConvergence implies always (not allHeard)
     } is checked 
 }
+=======
+>>>>>>> daa5b2b28eb3c1a7099526f68eec2fcb148dba7e

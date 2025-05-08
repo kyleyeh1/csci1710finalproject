@@ -1,12 +1,14 @@
 #lang forge/temporal
 
+/*
+This file models that a simple gossip protocol with only one rumor spreader spreading one rumor 
+at once. Rumors spread at an exponential rate. Also models that non-convergence can occur.
+*/
+
 option max_tracelength 14
 option min_tracelength 5
 option no_overflow true
 option run_sterling "simple_gossip_vis.js"
-
-
-one sig System {}
 
 abstract sig Node {
     var heardRumors: set Rumor
@@ -41,8 +43,6 @@ pred distinctSpread {
     let firstRound = {n: Node | {RumorSpreader.rumor in n.heardRumors}} | {
         let secondRound = {n: Node | {RumorSpreader.rumor in n.heardRumors'}} | {
             let ignorant = {n : Node | {RumorSpreader.rumor not in n.heardRumors}} | {
-                // firstRound in secondRound
-                // #(ignorant) > #(firstround)
                 #(ignorant) > #(firstRound) => { // more ignorant nodes than spreaders
                     #(firstRound) = #(secondRound - firstRound)
                 }
@@ -50,7 +50,6 @@ pred distinctSpread {
                     #{ignorant} = #{secondRound - firstRound}
                 }
             }
-            // #{firstRound} = min[#{secondRound - firstRound}, #{n: Node | {RumorSpreader.rumor not in n.heardRumors}}]
         }
     }
 }
@@ -73,12 +72,12 @@ pred gossip {
             some m: Node | {
                 n != m
                 RumorSpreader.rumor in m.heardRumors'
-                // RumorSpreader.rumor not in m.heardRumors
             }
         }
     }
 }
 
+// traces for our gossip protocol
 pred simpleGossipTraces {
     always {wellformed}
     initialSimple
