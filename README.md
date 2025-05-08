@@ -2,6 +2,9 @@
 
 README
 You should write a one-page README.md file describing how you structured your model and what your model proved. You can assume that anyone reading it will be familiar with your project proposal, but comprehensive documentation is always welcome. Here are some examples of points you might cover:
+How if your model structured and what does is prove?
+
+MAKE SURE TO TALKE ABOUT HOW WE MADE OUR MODEL SO IT SATISFIES THE FIFO AND CAUSAL ORDERING
 
 What tradeoffs did you make in choosing your representation? What else did you try that didn’t work as well?
 
