@@ -117,5 +117,5 @@ pred gossipTraces {
 
 run {
     gossipTraces
-    #Rumor = 3 // apparently this is the only way it works lmao
+    #Rumor = 3
 } for exactly 10 Node, 7 Int, 2 RumorSpreader, 8 RumorListener, 3 Rumor
