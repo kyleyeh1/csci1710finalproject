@@ -1,8 +1,8 @@
 #lang forge/temporal
 
 /*
-This file models that a simple gossip protocol with only one rumor spreader spreading
-one rumor at once. Rumors spread at an exponential rate.
+This file models that a simple gossip protocol with only one rumor spreader spreading one rumor 
+at once. Rumors spread at an exponential rate. Also models that non-convergence can occur.
 */
 
 option max_tracelength 14
@@ -80,6 +80,7 @@ pred gossip {
     }
 }
 
+// traces for our gossip protocol
 pred simpleGossipTraces {
     always {wellformed}
     initialSimple

@@ -2,7 +2,7 @@
 
 /*
 This file models a gossip protocol where multiple spreaders can spread one distinct rumor at each
-time stamp. Rumors spread at an exponential rate.
+time stamp. Rumors spread at an exponential rate. Also models that non-convergence can occur.
 */
 
 option max_tracelength 14
@@ -92,6 +92,7 @@ pred gossip {
     }
 }
 
+// traces for our gossip protocol
 pred multiSpreadGossipTraces {
     always {wellformed}
     initialSimple
