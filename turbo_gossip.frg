@@ -23,6 +23,8 @@ sig RumorSpreader extends Node {
 
 sig RumorListener extends Node {}
 
+// this predicate ensures that each rumor is only spread by one rumor spreader
+// and that the baseRumors are persistent across time stamps
 pred wellformed {
     all disj rs1, rs2: RumorSpreader | #{{rs1.baseRumors} & {rs2.baseRumors}} = 0
     all rs: RumorSpreader { 
@@ -30,6 +32,8 @@ pred wellformed {
     }
 }
 
+// this predicate ensures that in the initial state, no listeners have heard any rumors
+// every rumor belongs to one rumor spreader and has been heard by that rumor spreader
 pred initialRumor[r: Rumor] {
     all rl: RumorListener | {
         r not in rl.heardRumors
@@ -42,6 +46,7 @@ pred initialRumor[r: Rumor] {
     }
 }
 
+// this predicate is the end state predicate that ensures that all nodes have heard the rumor
 pred allHeardRumor[r: Rumor] {
     all n: Node | {
         all rs: RumorSpreader | {
@@ -51,33 +56,28 @@ pred allHeardRumor[r: Rumor] {
     }
 }
 
+// this predicate models how rumors are spread --- essentially, for a given rumor
+// in each round, the rumor spreads exponentially (i.e. 1 -> 2 -> 4 -> 8 -> ...)
+// if there are enough nodes remaining to hear the rumor, otherwise, it spreads
+// to all remaining nodes
 pred distinctSpreadRumor[r: Rumor] {
-    all rs: RumorSpreader | {
-        let firstRound = {n: Node | r in n.heardRumors} | {
-            let secondRound = {n: Node | r in n.heardRumors'} | {
-                let ignorant = {n: Node | r not in n.heardRumors} | {
-                    #(ignorant) > #(firstRound) => {
-                        #(firstRound) = #(secondRound - firstRound)
-                    }
-                    #(ignorant) <= #(secondRound - firstRound) => {
-                        #(ignorant) = #(secondRound - firstRound)
-                    }
+    let firstRound = {n: Node | r in n.heardRumors} | {
+        let secondRound = {n: Node | r in n.heardRumors'} | {
+            let ignorant = {n: Node | r not in n.heardRumors} | {
+                #(ignorant) > #(firstRound) => {
+                    #(firstRound) = #(secondRound - firstRound)
+                }
+                #(ignorant) <= #(secondRound - firstRound) => {
+                    #(ignorant) = #(secondRound - firstRound)
                 }
             }
         }
     }
 }
 
-// pred nonDistinctSpread {
-//     all rs: RumorSpreader | {
-//         let firstRound = {n: Node | {rs.rumor in n.heardRumors}} | {
-//             let secondRound = {n: Node | {rs.rumor in n.heardRumors'}} | {
-//                 #(secondRound) >= #(firstRound)
-//             }
-//         }
-//     }
-// }
-
+// this predicate models the gossip protocol, where for a given rumor,
+// all nodes will retain all rumors they have heard in the former state
+// and that all rumor spreaders will spread the rumor to at least on other node
 pred gossipRumor[r: Rumor] {
     all n: Node | {
         // guard
@@ -95,19 +95,24 @@ pred gossipRumor[r: Rumor] {
     }
 }
 
+// this predicate models what happens when a rumor is not spread in a given round
 pred keepRumorUnspread[r: Rumor] {
     all n: Node | {
         r in n.heardRumors <=> r in n.heardRumors'
     }
 }
 
+// this predicate models the timeline of running the gossip protocol on one rumor
+// it ensures that the rumor starts from the initial state, is eventually spread
+// to all nodes, and always gossips in an exponential manner or does nothing in any
+// given timestamp
 pred spreadOneRumor[r: Rumor] {
     initialRumor[r]
     always {(gossipRumor[r] and distinctSpreadRumor[r]) or allHeardRumor[r] or keepRumorUnspread[r]}
-    // always {allHeardRumor[r] or keepRumorUnspread[r]}
     eventually {allHeardRumor[r]}
 }
 
+// traces for our gossip protocol
 pred gossipTraces {
     always {wellformed}
     all r: Rumor | {
@@ -118,4 +123,4 @@ pred gossipTraces {
 run {
     gossipTraces
     #Rumor = 3
-} for exactly 10 Node, 7 Int, 2 RumorSpreader, 8 RumorListener, 3 Rumor
+} for exactly 10 Node, 6 Int, 2 RumorSpreader, 8 RumorListener, 3 Rumor
