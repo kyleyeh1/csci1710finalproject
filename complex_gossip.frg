@@ -8,8 +8,6 @@ time stamp. Rumors spread at an exponential rate.
 option no_overflow true
 option run_sterling "simple_gossip_vis.js"
 
-one sig System {}
-
 abstract sig Node {
     var heardRumors: set Rumor
 }
