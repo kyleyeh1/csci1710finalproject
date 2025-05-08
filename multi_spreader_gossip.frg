@@ -1,5 +1,10 @@
 #lang forge/temporal
 
+/*
+This file models a gossip protocol where multiple spreaders can spread one distinct rumor at each
+time stamp. Rumors spread at an exponential rate.
+*/
+
 option max_tracelength 14
 option min_tracelength 5
 option no_overflow true
@@ -105,6 +110,6 @@ run {
     multiSpreadGossipTraces
 } for exactly 20 Node, 6 Int, 2 RumorSpreader, 18 RumorListener, 2 Rumor
 
-// run {
-//     multiSpreadGossipTraces
-// } for exactly 8 Node, 6 Int, 2 RumorSpreader, 6 RumorListener, 2 Rumor
+run {
+    nonConvergence
+} for exactly 20 Node, 6 Int, 2 RumorSpreader, 18 RumorListener, 2 Rumor

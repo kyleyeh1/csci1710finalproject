@@ -1,7 +1,9 @@
 #lang forge/temporal
 
 /*
-allows for the spread of multiple rumors at separate times from multiple spreaders
+This file models that most complex gossip protocol, where there can be multiple rumor spreaders
+spreading multiple rumors at once, where the rumors are spread at different rates (i.e. rumors 
+can be remain unspread in a given round). Rumors spread at an exponential rate.
 */
 
 option max_tracelength 14

@@ -4,7 +4,6 @@ open "turbo_gossip.frg"
 
 assert gossipTraces is sat for exactly 20 Node, 6 Int, 1 Rumor
 assert wellformed is necessary for gossipTraces for exactly 20 Node, 6 Int, 1 Rumor
-assert 
 
 assert {
   gossipTraces implies eventually {all n: Node, r: Rumor | r in n.heardRumors}

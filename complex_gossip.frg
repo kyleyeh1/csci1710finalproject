@@ -1,5 +1,10 @@
 #lang forge/temporal
 
+/*
+This file models a more complex gossip protocol where multiple spreaders can spread multiple distinct rumor at each
+time stamp. Rumors spread at an exponential rate.
+*/
+
 option no_overflow true
 option run_sterling "simple_gossip_vis.js"
 
@@ -62,16 +67,6 @@ pred distinctSpreadRumor[r: Rumor] {
     }
 }
 
-// pred nonDistinctSpread {
-//     all rs: RumorSpreader | {
-//         let firstRound = {n: Node | {rs.rumor in n.heardRumors}} | {
-//             let secondRound = {n: Node | {rs.rumor in n.heardRumors'}} | {
-//                 #(secondRound) >= #(firstRound)
-//             }
-//         }
-//     }
-// }
-
 pred gossipRumor[r: Rumor] {
     all n: Node | {
         // guard
@@ -104,5 +99,5 @@ pred gossipTraces {
 
 run {
     gossipTraces
-    #Rumor = 3 // apparently this is the only way it works lmao
+    #Rumor = 3
 } for exactly 10 Node, 7 Int, 2 RumorSpreader, 8 RumorListener, 3 Rumor
