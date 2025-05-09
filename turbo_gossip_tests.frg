@@ -2,8 +2,13 @@
 
 open "turbo_gossip.frg"
 
+pred gossipTracesSufficient {
+  some r: Rumor | {always{(gossipRumor[r] and distinctSpreadRumor[r]) or allHeardRumor[r] or keepRumorUnspread[r]}}
+}
+
 assert gossipTraces is sat for exactly 20 Node, 6 Int, 1 Rumor
 assert wellformed is necessary for gossipTraces for exactly 20 Node, 6 Int, 1 Rumor
+assert gossipTraces is sufficient for wellformed for exactly 20 Node, 6 Int, 1 Rumor
 
 assert {
   gossipTraces implies eventually {all n: Node, r: Rumor | r in n.heardRumors}
